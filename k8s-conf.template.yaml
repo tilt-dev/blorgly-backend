@@ -1,0 +1,53 @@
+# Template should be populated using populate_config_template.py
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: %(environment)s-%(owner)s-lb-blorgly-be
+  labels:
+    app: blorgly
+    owner: %(owner)s
+    environment: %(environment)s
+    tier: backend
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: blorgly
+    owner: %(owner)s
+    environment: %(environment)s
+    tier: backend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: %(environment)s-%(owner)s-blorgly-be
+spec:
+  selector:
+    matchLabels:
+      app: blorgly
+      owner: %(owner)s
+      environment: %(environment)s
+      tier: backend
+  template:
+    metadata:
+      name: %(environment)s-%(owner)s-blorgly-be
+      labels:
+        app: blorgly
+        owner: %(owner)s
+        environment: %(environment)s
+        tier: backend
+    spec:
+      containers:
+      - name: backend
+        imagePullPolicy: Always
+        image: %(imgname)s
+        command: [
+          "./server",
+          "--dbAddr", "%(db_addr)s"
+        ]
+        ports:
+        - containerPort: 8080
+
