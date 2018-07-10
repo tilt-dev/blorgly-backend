@@ -41,7 +41,7 @@ func setupDatabase() {
 }
 
 func Random(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintln(w, "random!!!")
+	fmt.Fprintln(w, "random")
 }
 
 func Golink(w http.ResponseWriter, req *http.Request) {
