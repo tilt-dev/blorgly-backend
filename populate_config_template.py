@@ -55,7 +55,7 @@ def populate_config_template(infile, env, owner):
         KEY_OWNER: owner,
         KEY_IMAGE_NAME: utils.image_name(env, owner),
         # Is this the same because the db is still the same??
-        KEY_DB_ADDR: "hissing-cockroach-cockroachdb:26257",
+        KEY_DB_ADDR: "hissing-cockroach-cockroachdb",
     }
     template = get_file(infile)
 
