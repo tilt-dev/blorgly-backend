@@ -1,0 +1,14 @@
+# -*- mode: Python -*-
+# Petsfile for starting blorgly_backend (https://github.com/windmilleng/pets)
+
+# We really only need blorg-backend for its cockroach provider
+load("go-get://github.com/windmilleng/blorg-backend", "cockroach")
+
+def local(cockroach):
+  cockroach_addr = "%s:%d" % (cockroach["hostname"], cockroach["port"])
+  port = 8082 # hardcoded in main.go
+  backend = start("go run ./main.go --dbAddr=%s" % cockroach_addr)
+  return service(backend, "localhost", port)
+
+blorgly_backend = "blorgly-backend"
+register(blorgly_backend, "local", local, deps=[cockroach])
