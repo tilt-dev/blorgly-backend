@@ -4,8 +4,25 @@
 # We really only need blorg-backend for its cockroach provider
 load("go-get://github.com/windmilleng/blorg-backend", "cockroach")
 
+# Set up the database
+def run_sql(cockroach, sql):
+  cockroach_port = cockroach["port"]
+
+  # this doesn't do escaping right but that's ok; it's not meant to be generally reusable
+  run(("cockroach sql --insecure --port=%d -e " % cockroach_port) + ("'%s'" % sql))
+
+def init_cockroach_tables(c):
+  cockroach_port = c["port"]
+  run_sql(c, "CREATE DATABASE IF NOT EXISTS golink;")
+  run("cockroach --insecure --port=%d user set blorger" % cockroach_port)
+  run_sql(c, "GRANT ALL ON DATABASE golink TO blorger;")
+  run_sql(c, "GRANT ALL ON TABLE golink.* TO blorger;")
+  run_sql(c, "SET DATABASE = golink; CREATE TABLE IF NOT EXISTS links (name TEXT PRIMARY KEY, url TEXT);")
+
 def local(cockroach):
-  cockroach_addr = "%s:%d" % (cockroach["hostname"], cockroach["port"])
+  cockroach_addr = cockroach["host"]
+  init_cockroach_tables(cockroach)
+
   port = 8082 # hardcoded in main.go
   backend = start("go run ./main.go --dbAddr=%s" % cockroach_addr)
   return service(backend, "localhost", port)
