@@ -5,8 +5,8 @@ ENV_DEVEL = 'devel'
 ENV_PROD = 'prod'
 
 ENV_TO_PROJ = {
-    ENV_DEVEL: 'blorgly-dev',
-    ENV_PROD: 'blorgly-prod'  # probably? idk!
+    ENV_DEVEL: 'blorg-dev',
+    ENV_PROD: 'blorg-prod'
 }
 
 
