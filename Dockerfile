@@ -10,5 +10,6 @@ ENV SRC_DIR=/go/src/github.com/windmilleng/blorgly-backend
 ADD . $SRC_DIR
 
 # Build it:
+RUN cd $SRC_DIR; go get ./...
 RUN cd $SRC_DIR; go build -o server; cp server /app/
 ENTRYPOINT ["./server"]
