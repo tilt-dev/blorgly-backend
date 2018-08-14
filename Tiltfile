@@ -5,7 +5,8 @@ def blorgly_backend_prod():
   return blorgly_backend('prod')
 
 def blorgly_backend(env):
-  image = build_docker_image('Dockerfile.base', 'gcr.io/blorg-dev/blorgly-backend:' + env + '-' + local('whoami').rstrip('\n'))
+  entrypoint = '/app/server'  # (or if we set WORKDIR to /app, should be "./server")
+  image = build_docker_image('Dockerfile.base', 'gcr.io/blorg-dev/blorgly-backend:' + env + '-' + local('whoami').rstrip('\n'), entrypoint)
   image.add_mount('/blorgly-backend', git_repo('.'))
   image.add_cmd('echo hi')
   # print(image)
