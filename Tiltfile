@@ -5,10 +5,13 @@ def blorgly_backend_prod():
   return blorgly_backend('prod')
 
 def blorgly_backend(env):
-  entrypoint = '/go/bin/blorgly-backend'
+  entrypoint = '/app/server'
   image = build_docker_image('Dockerfile.base', 'gcr.io/blorg-dev/blorgly-backend:' + env + '-' + local('whoami').rstrip('\n'), entrypoint)
-  image.add_mount('/go/src/github.com/windmilleng/blorgly-backend', git_repo('.'))
-  image.add_cmd('go install github.com/windmilleng/blorgly-backend')
+  src_dir = '/go/src/github.com/windmilleng/blorgly-backend'
+  image.add_mount(src_dir, git_repo('.'))
+  image.add_cmd('cd ' + src_dir + '; go get ./...')
+  image.add_cmd('mkdir /app')
+  image.add_cmd('cd ' + src_dir + '; go build -o server; cp server /app/')
   # print(image)
   yaml = local('python populate_config_template.py ' + env + ' 1>&2 && cat k8s-conf.generated.yaml')
 
