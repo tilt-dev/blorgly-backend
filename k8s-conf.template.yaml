@@ -45,7 +45,7 @@ spec:
         imagePullPolicy: Always
         image: %(imgname)s
         command: [
-          "./server",
+          "/go/bin/blorgly-backend",
           "--dbAddr", "%(db_addr)s"
         ]
         ports:
