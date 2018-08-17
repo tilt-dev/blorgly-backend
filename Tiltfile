@@ -10,7 +10,7 @@ def blorgly_backend(env):
   src_dir = '/go/src/github.com/windmilleng/blorgly-backend'
   image.add_mount(src_dir, git_repo('.'))
   image.add_cmd('cd ' + src_dir + '; go get ./...')
-  image.add_cmd('mkdir /app')
+  image.add_cmd('mkdir -p /app')
   image.add_cmd('cd ' + src_dir + '; go build -o server; cp server /app/')
   # print(image)
   yaml = local('python populate_config_template.py ' + env + ' 1>&2 && cat k8s-conf.generated.yaml')
