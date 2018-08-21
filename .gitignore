@@ -1,3 +1,9 @@
-
 # data when running cockroach locally
 cockroach-data
+
+# python junk
+__pycache__
+*.pyc
+
+# generated yaml
+*.generated.yaml
